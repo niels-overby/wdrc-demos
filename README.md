@@ -1,2 +1,8 @@
-# wdrc-demos
-Page for audio demos related to combined noise reduction and dynamic range compression
+# Demos
+
+| Config        | Audio |
+| ------------- | ------------- |
+| High SNR      | n |
+| ------------- | ------------- |
+| Fast - Slow   |  audio |
+| Fast - Aware  | Content Cell  |
