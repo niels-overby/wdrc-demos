@@ -1,0 +1,9 @@
+{
+    "hint" : "/Users/nielsoverby/Documents/PhD/Data/speech/HINT",
+    "timit" : "/Users/nielsoverby/Documents/PhD/Data/TIMIT",
+    "icra" : "/Users/nielsoverby/Documents/PhD/Data/noise/ICRA",
+    "noisex" : "/Users/nielsoverby/Documents/PhD/Data/noise/noisex",
+    "oldenburgHRIR" : "/Users/nielsoverby/Documents/PhD/Data/brir/oldenburg",
+    "surrey" : "/Users/nielsoverby/Documents/PhD/Data/brir/SURREY/",
+    "data" : "/Users/nielsoverby/Documents/PhD/Data/"
+}
