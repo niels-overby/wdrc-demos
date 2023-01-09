@@ -44,6 +44,7 @@ class processor_creator():
             'Fast Acting' : wdrc.WDRC(atk=5e-3,rel=50e-3,ratio=self.ratio,thr=self.thr,fs=self.fs),
             'Slow Acting' : wdrc.WDRC(atk=5e-3,rel=2000e-3,ratio=self.ratio,thr=self.thr,fs=self.fs),
             'Aware' : wdrc.WDRC(atk=5e-3,rel=[50e-3,2000e-3],ratio=self.ratio,thr=self.thr,fs=self.fs),
+            'Ideal' : wdrc.SourceIndependentWDRC(atk=5e-3,rel=[50e-3,2000e-3],thr=self.thr,ratio=self.ratio,fs=self.fs)
         }
 
         self.nr_dict = {
@@ -74,7 +75,7 @@ class scene_creator():
         ## initialize noise dict
         n_ = [generation.FindSound(
                 audiodata['data'],
-                target_sound = noi,fs=fs) for noi in ['icra_01','icra_04']]
+                target_sound = noi,fs=fs) for noi in ['icra_01','icra_06']]
 
         self.n_dict = dict(zip(['Stationary','Modulated'],n_))
 
