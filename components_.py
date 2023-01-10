@@ -21,6 +21,8 @@ class processor_creator():
         self.wdrc_choice = 'fast'
         self.nr_choice = 'none'
 
+        self.b_link = True
+
         self.update_dicts()
 
     def update_param(self,param,val):
@@ -37,20 +39,25 @@ class processor_creator():
             self.nr_choice = val
         elif param =='apply':
             self.gen_sys()
+
+        elif param =='b_link':
+            self.b_link = val == 'True'
+
+        
         None
     
     def update_dicts(self):
         self.wdrc_dict = {
-            'Fast Acting' : wdrc.WDRC(atk=5e-3,rel=50e-3,ratio=self.ratio,thr=self.thr,fs=self.fs),
-            'Slow Acting' : wdrc.WDRC(atk=5e-3,rel=2000e-3,ratio=self.ratio,thr=self.thr,fs=self.fs),
-            'Aware' : wdrc.WDRC(atk=5e-3,rel=[50e-3,2000e-3],ratio=self.ratio,thr=self.thr,fs=self.fs),
-            'Ideal' : wdrc.SourceIndependentWDRC(atk=5e-3,rel=[50e-3,2000e-3],thr=self.thr,ratio=self.ratio,fs=self.fs)
+            'Fast Acting' : wdrc.WDRC(atk=5e-3,rel=50e-3,ratio=self.ratio,thr=self.thr,fs=self.fs,b_link=self.b_link),
+            'Slow Acting' : wdrc.WDRC(atk=5e-3,rel=2000e-3,ratio=self.ratio,thr=self.thr,fs=self.fs,b_link=self.b_link),
+            'Aware' : wdrc.WDRC(atk=5e-3,rel=[50e-3,2000e-3],ratio=self.ratio,thr=self.thr,fs=self.fs,b_link=self.b_link),
+            'Ideal' : wdrc.SourceIndependentWDRC(atk=5e-3,rel=[50e-3,2000e-3],thr=self.thr,ratio=self.ratio,fs=self.fs,b_link=self.b_link)
         }
 
         self.nr_dict = {
             'None': False,
-            'Mild' : enhancement.LogMMSE(fs=self.fs,alpha=0.98,gain_min=utils.from_dB(-12)),
-            'Moderate' : enhancement.LogMMSE(fs=self.fs,alpha=0.98,gain_min=utils.from_dB(-24)),
+            'Mild' : enhancement.LogMMSE(fs=self.fs,alpha=0.98,gain_min=utils.from_dB(-12),b_link=self.b_link),
+            'Moderate' : enhancement.LogMMSE(fs=self.fs,alpha=0.98,gain_min=utils.from_dB(-24),b_link=self.b_link),
             None : False
         }
 
@@ -68,7 +75,7 @@ class processor_creator():
             self.s =  wdrc.NR_WDRC(self.nr,self.wdrc)
 
 class scene_creator():
-    def __init__(self,n_concats=10):
+    def __init__(self,n_concats=10,spatial=False):
         fs = 16e3
         self.speech = generation.TIMIT(audiodata['timit'],fs=fs)
         self.n_concats = n_concats
@@ -81,9 +88,19 @@ class scene_creator():
 
         ## Initialize room dict
         rooms = ['Anechoic','A','B','C','D']
-        r_ = [reverberation.Surrey(audiodata['surrey'],
-                            direct_sec=2e-3,fs=fs,
-                            room=r,azimuth=0) for r in rooms]
+
+        if spatial:
+            r_ = [[reverberation.Surrey(audiodata['surrey'],
+                                direct_sec=2e-3,fs=fs,
+                                room=r,azimuth=az) for az in [-60,60]] for r in rooms]
+        else:
+            r_ = [reverberation.Surrey(audiodata['surrey'],
+                                direct_sec=2e-3,fs=fs,
+                                room=r,azimuth=0) for r in rooms]
+
+
+        
+
         self.r_dict = dict(zip(rooms,r_))
         
         self.snr = 12
