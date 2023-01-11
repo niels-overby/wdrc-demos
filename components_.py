@@ -75,14 +75,14 @@ class processor_creator():
             self.s =  wdrc.NR_WDRC(self.nr,self.wdrc)
 
 class scene_creator():
-    def __init__(self,n_concats=10,spatial=False):
+    def __init__(self,n_concats=10,spatial=False,speech ='timit',noise=['icra_01','icra_06']):
         fs = 16e3
-        self.speech = generation.TIMIT(audiodata['timit'],fs=fs)
+        self.speech = generation.TIMIT(audiodata[speech],fs=fs)
         self.n_concats = n_concats
         ## initialize noise dict
         n_ = [generation.FindSound(
                 audiodata['data'],
-                target_sound = noi,fs=fs) for noi in ['icra_01','icra_06']]
+                target_sound = noi,fs=fs) for noi in noise]
 
         self.n_dict = dict(zip(['Stationary','Modulated'],n_))
 
@@ -97,9 +97,6 @@ class scene_creator():
             r_ = [reverberation.Surrey(audiodata['surrey'],
                                 direct_sec=2e-3,fs=fs,
                                 room=r,azimuth=0) for r in rooms]
-
-
-        
 
         self.r_dict = dict(zip(rooms,r_))
         
@@ -133,6 +130,4 @@ class scene_creator():
                                             pre_noise=0.5,post_noise=0.5,
                                             n_concats=self.n_concats)
         
-        
-
 scene_gen = scene_creator()
