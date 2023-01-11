@@ -75,7 +75,7 @@ class processor_creator():
             self.s =  wdrc.NR_WDRC(self.nr,self.wdrc)
 
 class scene_creator():
-    def __init__(self,n_concats=10,spatial=False,speech ='timit',noise=['icra_01','icra_06']):
+    def __init__(self,n_concats=10,spatial=False,speech ='timit',noise=['icra_01','TMETRO_ch01']):
         fs = 16e3
         self.speech = generation.TIMIT(audiodata[speech],fs=fs)
         self.n_concats = n_concats
